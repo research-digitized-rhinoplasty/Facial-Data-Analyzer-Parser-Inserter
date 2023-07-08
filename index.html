@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSON Parser - Participants</title>
+<script src="jquery-3.6.1.js"></script>
+
+<!-- JSON Parser webpage interface for inserting 3D Landmark Markings and Measurements into a database -->
+
+</head>
+<body>
+
+<h1>JSON Parser - Participants</h1>
+
+<div style="
+  border: 1px solid black;
+  width: fit-content;
+  padding: 10px;">
+  <strong style="color: red;">WARNING:</strong></br>
+  <strong>Pressing 'Browse...' and uploading the JSON file will <i>automatically upload</i> the formatted data to the database.</strong></br>
+  <strong>Please make sure to input the correct participant features before uploading the marked JSON file.</strong>
+</div>
+
+</br>
+
+<p>Select participant features:</p>
+<form style="
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  "
+  id="inputFeatures">
+
+  <label for="gender">Gender</label>
+  <select name="gender" id="gender">
+    <option value="M">Male</option>
+    <option value="F">Female</option>
+    <option value="O">Other</option>
+    <option value="P">Prefer not to specify</option>
+  </select>
+
+  <label for="ethnicity">Ethnicity</label>
+  <select name="ethnicity" id="ethnicity">
+    <option>Prefer not to specify</option>
+    <option>White</option>
+    <option>Black or African American</option>
+    <option>American Indian or Alaska Native</option>
+    <option>Asian</option>
+    <option>Native Hawaiian or Other Pacific Islander</option>
+    <option>Hispanic</option>
+  </select>
+
+  <label for="facialSurgery">Facial Surgery</label>
+  <select name="facialSurgery" id="facialSurgery">
+    <!-- <option>Any</option> -->
+    <option>No Facial Surgery</option>
+    <option>Brow/forehead lift</option>
+    <option>Ear pinning</option>
+    <option>Chin, cheek, or jaw reshaping</option>
+    <option>Eyelid lift</option>
+    <option>Facelift</option>
+    <option>Facial implants</option>
+    <option>Hair replacement surgery</option>
+    <option>Lip augmentation</option>
+    <option>Rhinoplasty</option>
+    <option>Other</option>
+    <option>Prefer not to specify</option>
+  </select>
+
+  <label for="age">Age:</label>
+  <input type="number" id="age" min="0" max="100" name="age" value="18">
+
+  <!-- <input type="submit" value="Submit" style="margin: 10px;"> -->
+</form>
+
+<!-- Prompt user for JSON file -->
+<p>Upload JSON file here:</p>
+<input type="file" id="fileToLoad" accept=".json" autocomplete="off">
+</br>
+
+<!-- Display boxes for user to see changes in JSON -->
+<div style="display: flex;">
+  <div id="inputParent" style="margin: 5px;">
+    <div><label>Input</label></div>
+    <div><textarea id="inputBox" readonly style="resize:none;" rows="25" cols="50"></textarea></div>
+  </div>
+  <div id="outputParent" style="margin: 5px;">
+    <div><label>Output</label></div>
+    <div><textarea id="outputBox" readonly style="resize:none;" rows="25" cols="50"></textarea></div>
+  </div>
+  <!-- <div id="numberOutputParent" style="margin: 5px;">
+    <div><label>Varied Output</label></div>
+    <div><textarea id="numberOutputBox" readonly style="resize:none;" rows="25" cols="50"></textarea></div>
+  </div> -->
+</div>
+
+<!-- <button type="button" id="uploadButton1">Upload Original</button> -->
+<!-- <button type="button" id="uploadButton2">Upload Varied</button> -->
+<!-- Buttons for different user choices for upload -->
+<pre id="outputServer"></pre>
+<!-- Upload status -->
+
+<script>
+  var el = document.getElementById('fileToLoad');
+  el.onchange = function loadDat() { // when user uploads file
+  var fileReader = new FileReader();
+  fileReader.onload=function(e) {
+    // parse JSON file
+    subjectModels = JSON.parse(e.target.result);
+    document.getElementById('inputBox').textContent = JSON.stringify(subjectModels, undefined, 2);
+
+    var partFeatureInput = document.querySelectorAll('#inputFeatures select')
+    var genderInput = partFeatureInput[0].value
+    var ethnicityInput = partFeatureInput[1].value
+    var facialSurgeryInput = partFeatureInput[2].value
+    var ageInput = document.querySelectorAll('input[type=number]')[0].value
+
+    // parse Participant elements
+    // create JSON to hold parsed JSON data
+    var zaJson1 = {}; // 34385499
+
+    if(
+      !subjectModels.hasOwnProperty("gender") &&
+      !subjectModels.hasOwnProperty("age") &&
+      !subjectModels.hasOwnProperty("measurements") &&
+      !subjectModels.hasOwnProperty("features")
+    ) {
+      document.getElementById('outputBox').textContent = "Error: Wrong JSON layout.";
+      return
+    } // end if
+
+    zaJson1["Gender"] = subjectModels.gender;
+    zaJson1["Age"] = subjectModels.age;
+    zaJson1["Ethnicity"] = ethnicityInput;
+    zaJson1["FacialSurgery"] = facialSurgeryInput;
+    zaJson1["Landmarks"] = [];
+    zaJson1["Measurements"] = [];
+
+    if(zaJson1["Gender"] == "") { // if inserted gender and age do not have any values, set to null
+      zaJson1["Gender"] = genderInput;
+    } // end if gender
+    if(zaJson1["Age"] == "") {
+      zaJson1["Age"] = ageInput;
+    } // end if age
+    
+    for(var i=0; i<subjectModels.features.length; i++){ // iterate through features in original JSON
+      var valsJson = { // get feature/landmark abbreviation and x-y-z values
+        "LandmarkID":subjectModels.features[i]["abbrv"],
+        "xVal":subjectModels.features[i]["xVal"],
+        "yVal":subjectModels.features[i]["yVal"],
+        "zVal":subjectModels.features[i]["zVal"]
+      };
+      // push data to created JSON Landmarks
+      zaJson1["Landmarks"].push(valsJson);
+    } // end features for
+    for(var i=0; i<subjectModels.measurements.length; i++){ // iterate through measurements in original JSON
+      var valsJson = { // get measurement abbreviation and value
+        "MeasurementID":subjectModels.measurements[i]["id"],
+        "Value":subjectModels.measurements[i]["value"]
+      };
+      // push data to created JSON measurements
+      zaJson1["Measurements"].push(valsJson);
+    } // end measurements for
+    
+    // display created JSON in HTML
+    document.getElementById('outputBox').textContent = JSON.stringify(zaJson1, undefined, 2);
+
+    // Varied JSON - for extrapolating data
+    // shallow copy created JSON
+    // var zaJson2 = extrapolation(zaJson1) // requires extrapolation.js
+
+    // display varied JSON in HTML
+    // document.getElementById('numberOutputBox').textContent = JSON.stringify(zaJson2, undefined, 2);
+
+    // send created JSON to node server through button
+    testPost(JSON.parse(JSON.stringify(zaJson1)))
+
+    // send varied JSON to node server through button
+    // document.getElementById('uploadButton2').addEventListener("click", () => { testPost(zaJson2) }); 
+  } // end onload
+  fileReader.readAsText(this.files[0]);
+} // end el onchange
+
+function testPost(zaJson) { // send POST request to node server
+    $.ajax({
+      method: 'POST',
+      url: 'http://localhost:8000',
+      data: zaJson,
+      datatype: 'application/json',
+      success: function(data, status) { // https://www.tutorialsteacher.com/jquery/jquery-ajax-method
+        $("#outputServer").text("Status: " + status + " || Data sent to server"); // 4973039
+      } // end success
+    }); // end testPost
+}
+</script>
+
+</body>
+</html>
