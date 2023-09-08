@@ -1,19 +1,19 @@
-# Digitized-Rhinoplasty-Participant-Inserter
-Locally hosted tool used to insert data into the Digitized Rhinoplasty Web GUI Data Analyzer database.
+# Digitized-Rhinoplasty-JSON-Parser-And-Record-Inserter
+Locally hosted tool used to insert data such as participant records and/or landmarks and/or measurements into the Digitized Rhinoplasty Web GUI Data Analyzer database.
 
 To use:
 
 1. Input database details:
 
-    * Using a code editor of your choice, open the ```server.js``` file.
+    * Using a code editor of your choice, open the ```nodeMySqlFn.js``` file.
     * Adjust the following fields inside the ```con``` MySQL variable:
-      * Line 12: ```host``` (endpoint/URL)
-      * Line 13: ```port```
-      * Line 14: ```user```
-      * Line 15: ```password```
-      * Line 16: ```database```
+      * Line 4: ```host``` (endpoint/URL)
+      * Line 5: ```port```
+      * Line 6: ```user```
+      * Line 7: ```password```
+      * Line 8: ```database```
      
-    * Note: The database you connect to must have the correct schema (```participant```, ```participant_landmark```, ```participant_measurement```, ```landmark```, ```measurement```) for this code to correctly insert data.
+    * Note: The database you connect to must have the correct schema for this code to correctly insert data.
   
 2. Run node server:
 
@@ -21,14 +21,17 @@ To use:
     * The server runs locally on port 8000. If you wish to change the port, you must change the port number in the following file:
         * ```server.js```
             * Line 8
-        * ```index.html```
-            * Line 187
+        * ```js/participant_js/partJsonParse.js```
+            * Line 101
+        * ```js/lndMrkMeasmnt_js/lndMeasJsonParse.js```
+            * Line 105
          
 3. Use the tool:
 
     * Open the file ```index.html``` in a web browser.
     * Select desired participant features.
     * Upload marked JSON file.
-        * Warning: Only JSON files with the right keys/layout will be parsed. To change the conditions, adjust the details inside the ```index.html``` file:
-          * Lines 123, 124, 125, and 126
-    * Note the 'Output' text box to view the parsed and adjusted JSON object and what was inserted into the database.
+        * Warning: Only JSON files with the right keys/layout will be parsed. To change the conditions, adjust the details inside the ```index.html``` file.
+    * Note the 'Output' text box to view the parsed JSON object from the input JSON file and what is sent to the node server.
+    * After pressing the 'upload' button, an addiitonal textarea element will appear underneath the 'upload' button that displays the database record insertion status.
+       * If landmark or measurement values are missing from the database that are preventing the participant JSON file to be inserted, go to the 'Landmarks & Measurements' and upload the same file. The software will parse the existing landmarks and measurements and add new ones to the database. Afterwards, try inserting the participant JSON file again.
