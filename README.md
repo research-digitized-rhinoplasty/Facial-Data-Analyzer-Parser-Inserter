@@ -26,9 +26,9 @@ To use:
   
 3. Run node server:
 
-    * Using ```cmd``` or something similar, run the node server (```server.js```).
+    * Using ```cmd``` or something similar, run the node server (```node/server.js```).
     * The server runs locally on port 8000. If you wish to change the port, you must change the port number in the following file:
-        * ```server.js```
+        * ```node/server.js```
             * Line 8
         * ```js/participant_js/partJsonParse.js```
             * Line 101
