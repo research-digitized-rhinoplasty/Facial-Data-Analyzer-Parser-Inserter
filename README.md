@@ -3,7 +3,16 @@ Locally hosted tool used to insert data such as participant records and/or landm
 
 To use:
 
-1. Input database details:
+
+1. Install npm dependencies
+
+    * Open ```cmd``` or something similar and navigate to the project directory (/).
+    * Confirm the details inside package.json, then type ```npm install```.
+    * A folder called ```npm_modules``` will be downloaded to the project directory.
+    * If for any reason you wish to delete the project files and run into issues deleting ```npm_modules```:
+        * Using ```cmd``` or something similar, in the project directory, run the command ```npx rimraf --glob ./node_modules```.
+
+2. Input database details:
 
     * Using a code editor of your choice, open the ```nodeMySqlFn.js``` file.
     * Adjust the following fields inside the ```con``` MySQL variable:
@@ -15,7 +24,7 @@ To use:
      
     * Note: The database you connect to must have the correct schema for this code to correctly insert data.
   
-2. Run node server:
+3. Run node server:
 
     * Using ```cmd``` or something similar, run the node server (```server.js```).
     * The server runs locally on port 8000. If you wish to change the port, you must change the port number in the following file:
@@ -26,7 +35,7 @@ To use:
         * ```js/lndMrkMeasmnt_js/lndMeasJsonParse.js```
             * Line 105
          
-3. Use the tool:
+4. Use the software:
 
     * Open the file ```index.html``` in a web browser.
     * Select desired participant features.
