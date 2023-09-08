@@ -4,10 +4,10 @@ Locally hosted tool used to insert data such as participant records and/or landm
 To use:
 
 
-1. Install npm dependencies
+1. Install npm dependencies:
 
     * Open ```cmd``` or something similar and navigate to the project directory (/).
-    * Confirm the details inside package.json, then type ```npm install```.
+    * Confirm the details inside package.json (packages: cors, express, mysql), then type ```npm install```.
     * A folder called ```npm_modules``` will be downloaded to the project directory.
     * If for any reason you wish to delete the project files and run into issues deleting ```npm_modules```:
         * Using ```cmd``` or something similar, in the project directory, run the command ```npx rimraf --glob ./node_modules```.
