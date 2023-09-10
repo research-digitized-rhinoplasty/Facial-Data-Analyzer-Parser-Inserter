@@ -14,7 +14,7 @@ To use:
 
 2. Input database details:
 
-    * Using a code editor of your choice, open the ```nodeMySqlFn.js``` file.
+    * Using a code editor of your choice, open the ```node/nodeMySqlFn.js``` file.
     * Adjust the following fields inside the ```con``` MySQL variable:
       * Line 4: ```host``` (endpoint/URL)
       * Line 5: ```port```
