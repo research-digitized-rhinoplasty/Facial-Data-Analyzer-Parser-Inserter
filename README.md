@@ -27,7 +27,7 @@ To use:
 3. Run node server:
 
     * Using ```cmd``` or something similar, run the node server (```node/server.js```).
-    * The server runs locally on port 8000. If you wish to change the port, you must change the port number in the following file:
+    * The server runs locally on port 8000. If you wish to change the port, you must change the port number in the following files:
         * ```node/server.js```
             * Line 8
         * ```js/participant_js/partJsonParse.js```
@@ -42,5 +42,5 @@ To use:
     * Upload marked JSON file.
         * Warning: Only JSON files with the right keys/layout will be parsed. To change the conditions, adjust the details inside the ```index.html``` file.
     * Note the 'Output' text box to view the parsed JSON object from the input JSON file and what is sent to the node server.
-    * After pressing the 'upload' button, an addiitonal textarea element will appear underneath the 'upload' button that displays the database record insertion status.
+    * After pressing the 'upload' button, an additonal textarea element will appear underneath the 'upload' button that displays the database record insertion status.
        * If landmark or measurement values are missing from the database that are preventing the participant JSON file to be inserted, go to the 'Landmarks & Measurements' and upload the same file. The software will parse the existing landmarks and measurements and add new ones to the database. Afterwards, try inserting the participant JSON file again.
